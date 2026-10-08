@@ -56,11 +56,11 @@ class TimingCollector {
     double secs;
 
     friend std::ostream &operator<<(std::ostream &os, Duration d) {
-      if (d.secs < 1e-6)
+      if (d.secs < 1e-7)
         return os << d.secs * 1e9 << "ns";
-      if (d.secs < 1e-3)
+      if (d.secs < 1e-4)
         return os << d.secs * 1e6 << "µs";
-      if (d.secs < 1)
+      if (d.secs < 10)
         return os << d.secs * 1e3 << "ms";
       return os << d.secs << "s";
     }

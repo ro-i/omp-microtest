@@ -1,1 +1,3 @@
+local.mk
 omp_shared_mem
+omp_shared_mem_*
