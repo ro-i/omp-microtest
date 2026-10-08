@@ -56,9 +56,9 @@ class TimingCollector {
     double secs;
 
     friend std::ostream &operator<<(std::ostream &os, Duration d) {
-      if (d.secs < 1e-7)
+      if (d.secs < 1e-5)
         return os << d.secs * 1e9 << "ns";
-      if (d.secs < 1e-4)
+      if (d.secs < 1e-2)
         return os << d.secs * 1e6 << "µs";
       if (d.secs < 10)
         return os << d.secs * 1e3 << "ms";
@@ -68,6 +68,7 @@ class TimingCollector {
 
   double min_s = 0, max_s = 0, avg_s = 0, total_s = 0;
   size_t *failures;
+  uint64_t problem_size;
   std::string test_name;
   std::vector<double> times;
 
@@ -87,11 +88,11 @@ class TimingCollector {
 
   void print() {
     std::ostream os(std::cout.rdbuf());
-    os << bench_name << "|" << test_name << "|n=" << conf.problem_size
-       << "|i=" << times.size() - conf.warmup_iters
-       << "|d=" << Duration{total_s} << " - " << std::setprecision(0)
-       << std::fixed << "min: " << Duration{min_s}
-       << "; max: " << Duration{max_s} << "; avg: " << Duration{avg_s};
+    os << bench_name << "|" << test_name << "|n=" << problem_size
+       << "|i=" << times.size() - conf.warmup_iters << std::fixed
+       << std::setprecision(0) << "|d=" << Duration{total_s} << " - "
+       << "min: " << Duration{min_s} << "; max: " << Duration{max_s}
+       << "; avg: " << Duration{avg_s};
     if (failures)
       os << (*failures ? " - FAILED" : " - OK");
     os << "\n";
@@ -100,8 +101,11 @@ class TimingCollector {
 public:
   // num = expected number of iterations
   // data_bytes = bytes handled per iteration
-  TimingCollector(std::string_view test_name, size_t *failures = nullptr)
-      : failures{failures}, test_name{test_name} {
+  TimingCollector(std::string_view test_name, size_t *failures = nullptr,
+                  std::optional<uint64_t> problem_size = std::nullopt)
+      : failures{failures},
+        problem_size{problem_size.value_or(conf.problem_size)},
+        test_name{test_name} {
     times.reserve(conf.warmup_iters + conf.bench_iters);
   }
 
