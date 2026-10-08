@@ -1,3 +1,5 @@
 local.mk
 omp_shared_mem
 omp_shared_mem_*
+omp_launch_latency
+omp_launch_latency_*

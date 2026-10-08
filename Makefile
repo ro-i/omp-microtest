@@ -15,7 +15,7 @@ FLAGS_BENCH   ?= -O2 -fopenmp --offload-arch=$(OFFLOAD_ARCH) -std=c++20
 CXX_BENCH     := $(patsubst ~/%,$(HOME)/%,$(CXX_BENCH))
 
 # Thanks to BUILD_RULE, BENCHS' elements are also available as make targets.
-BENCHS         = omp_shared_mem
+BENCHS         = omp_launch_latency omp_shared_mem
 SRC_DIR        = src
 COMMON         = $(SRC_DIR)/bench.cpp
 COMMON_HEADERS = $(SRC_DIR)/common.h

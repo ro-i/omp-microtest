@@ -2,6 +2,7 @@ Small tests and benchmarks for various parts of the LLVM OpenMP implementation.
 
 Currently existing suites:
 - `omp_shared_mem`: covering OpenMP allocations of shared (CPU/GPU) memory
+- `omp_launch_latency`: testing OpenMP target kernel launch latency
 
 How to build:
 - set your C++ compiler in `CXX_BENCH` and your GPU arch in `OFFLOAD_ARCH`. You
