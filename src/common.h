@@ -121,9 +121,12 @@ public:
   }
 
   bool done() const {
-    return conf.auto_scale &&
-           times.size() - conf.warmup_iters >= BENCH_MIN_ITERS &&
-           total_s >= AUTO_SCALE_TIME;
+    if (times.size() < conf.warmup_iters)
+      return false;
+    if (conf.auto_scale)
+      return times.size() - conf.warmup_iters >= BENCH_MIN_ITERS &&
+             total_s >= AUTO_SCALE_TIME;
+    return times.size() - conf.warmup_iters >= conf.bench_iters;
   }
 };
 
