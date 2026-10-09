@@ -20,5 +20,17 @@ bool run_bench() {
     }
   }
 
+  {
+    TimingCollector tc("empty kernel with KLE", nullptr, 0);
+
+    while (!tc.done()) {
+      Timing t(tc);
+#pragma omp target teams ompx_bare num_teams(64) thread_limit(256)             \
+    ompx_dyn_cgroup_mem(1024)
+      {
+      }
+    }
+  }
+
   return true;
 }
